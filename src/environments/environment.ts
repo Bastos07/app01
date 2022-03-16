@@ -1,15 +1,11 @@
 export const environment = {
-<<<<<<< Updated upstream
-  production: false
-=======
   production: false,
   firebase: {
-    apiKey: 'AIzaSyAvbPZr7ewCALNTqgNunQjgw_G9S2oIiao',
-    authDomain: 'my-profile-cdb09.firebaseapp.com',
-    projectId: 'my-profile-cdb09',
-    storageBucket: 'my-profile-cdb09.appspot.com',
-    messagingSenderId: '1093120446960',
-    appId: '1:1093120446960:web:61fb1a42fba80b7bd98d35'
-  }
->>>>>>> Stashed changes
+    apiKey: 'AIzaSyB01KKteVgibUP02YjQUSVtA5g1Rv5HrNg',
+    authDomain: 'app01-d6774.firebaseapp.com',
+    projectId: 'app01-d6774',
+    storageBucket: 'app01-d6774.appspot.com',
+    messagingSenderId: '378502538210',
+    appId: '1:378502538210:web:5d14ba54c394b338444fbb',
+  },
 };
