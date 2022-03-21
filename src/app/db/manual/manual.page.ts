@@ -166,7 +166,7 @@ export class ManualPage implements OnInit {
           image: el.image,
           intro: el.intro,
           body: el.body,
-          
+          views: el.views,
           status: el.status
         });
 
