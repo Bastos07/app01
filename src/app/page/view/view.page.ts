@@ -19,7 +19,7 @@ export class ViewPage implements OnInit {
   // Conexão com o Firebase
   app = initializeApp(environment.firebase);
 
-  // Conexão com o banco de dados
+  // Conexão com o banco de dadosKw
   db = getFirestore();
 
   // Armazena o artigo completo
@@ -49,7 +49,7 @@ export class ViewPage implements OnInit {
 
       // Incrementa 'views' do artigo
       updateDoc(doc(this.db, 'manual', this.id), {
-        views: parseInt(this.art.views, 10) + 1
+        views: (parseInt(this.art.views, 10) + 1).toString()
       });
 
       // Se não foi encontrado...
