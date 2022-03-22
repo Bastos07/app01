@@ -5,6 +5,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { initializeApp } from 'firebase/app';
 import { doc, getDoc, getFirestore, updateDoc } from 'firebase/firestore';
 import { environment } from 'src/environments/environment';
+import { AngularFireAuth } from '@angular/fire/compat/auth';
+import { collection, addDoc } from 'firebase/firestore';
 
 @Component({
   selector: 'app-view',
@@ -25,11 +27,17 @@ export class ViewPage implements OnInit {
   // Armazena o artigo completo
   art: any;
 
+  // Variável que armazena dados do usuário logado
+  userData: any;
+
+  comment = '';
+
   constructor(
 
     // Injeta dependências
     private activatedRoute: ActivatedRoute,
-    private route: Router
+    private route: Router,
+    public auth: AngularFireAuth
   ) { }
 
   // 'ngOnInit()' deve ser 'async' por causa do 'await' usado logo abaixo!
@@ -58,5 +66,63 @@ export class ViewPage implements OnInit {
       // Volta para a lista de artigos
       this.route.navigate(['/usuarios']);
     }
+
+    // Verifica se tem usuario logado
+    this.auth.authState.subscribe(user => {
+      if (user) {
+
+        // Armazena os dados do usuário em 'this.user'
+        this.userData = user;
+      }
+    });
   }
+
+  // Salva comentários no banco de dados
+  async sendComment() {
+
+    // Sanitiza comentário, se necessário
+    this.comment = this.comment.replace(/<[^>]*>?/gm, '');
+    this.comment = this.comment.replace(/\n/g, '<br>').trim();
+    this.comment = this.comment.trim();
+
+    if (this.comment !== '') {
+
+      // Data de hoje, formatada
+      const yourDate = new Date();
+      const now = yourDate.toISOString().replace('T', ' ').split('.')[0];
+
+      // Formata dados para salvar no database
+      const commentData = {
+        name: this.userData.displayName,
+        email: this.userData.email,
+        photo: this.userData.photoURL,
+        uid: this.userData.uid,
+        date: now,
+        article: this.id,
+        comment: this.comment
+      };
+
+      console.log(commentData);
+
+      // Tentar armazenar cada documento (addDoc()) na coleção 'manual' (collection())
+      try {
+        const docRef = await addDoc(collection(this.db, 'comment'), commentData);
+
+        // Se deu certo, exibe o ID do documento no console
+        console.log('Documento adicionado com o ID: ', docRef.id);
+
+        // Se de errado...
+      } catch (e) {
+
+        // Exibe mensagem de eror no console.
+        console.error('Erro ao adicionar documento: ', e);
+      }
+
+
+    } else {
+      return false;
+    }
+
+  }
+
 }
